@@ -9,6 +9,7 @@ import AppwriteAccount from './Appwrite/Account.Services'
 import { APPWRITE_ENDPOINT } from './Utils/Appwrite/constants'
 import PublicRoute from './Routes/PublicRoute'
 import LoginSelection from './pages/LoginSelection'
+import RoleSelector from './pages/RoleSelector'
 
 console.log(typeof APPWRITE_ENDPOINT)
 
@@ -36,6 +37,10 @@ const router=createBrowserRouter([
      {
       path:"/loginSelection",
       element:<LoginSelection/>
+     },
+     {
+      path:"/roleSelector",
+      element:<RoleSelector/>
      }
 ])
 createRoot(document.getElementById('root')).render(

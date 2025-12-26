@@ -15,7 +15,7 @@ const[isLoggingOut,setIsLoggingOut]=useState(false)
        console.log("result")
        if(!result?.message){
         setIsLoggingOut(false)
-            navigate("/LoginSelection")
+            navigate("/")
        }
     }
     console.log("render and re-render")
