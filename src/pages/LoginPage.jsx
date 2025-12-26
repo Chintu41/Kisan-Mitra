@@ -34,7 +34,7 @@ function LogInPage() {
             console.log(result);
 
             if (result) {
-                navigate("/");
+                navigate("/dashboard");
             }
         } catch (error) {
             console.log("Error inside the LogInPage.jsx:", error);
