@@ -10,6 +10,7 @@ import { APPWRITE_ENDPOINT } from './Utils/Appwrite/constants'
 import PublicRoute from './Routes/PublicRoute'
 import LoginSelection from './pages/LoginSelection'
 import RoleSelector from './pages/RoleSelector'
+import PrivateRoute from './Routes/PrivateRoute'
 
 console.log(typeof APPWRITE_ENDPOINT)
 
@@ -32,6 +33,7 @@ const router=createBrowserRouter([
    },
      {
       path:"/dashboard",
+      // element:<PrivateRoute><MyDashboard/></PrivateRoute>
       element:<MyDashboard/>
      },
      {

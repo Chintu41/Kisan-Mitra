@@ -19,18 +19,28 @@ function SignupPage() {
   const location = useLocation()
   const appwriteAccount = new AppwriteAccount()
 
-  // 🔹 Role coming from previous page
   const role = location.state?.role
 
+  // Common fields
   const [fullname, setFullname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  // 🔐 Prevent direct access without role
+  // Role-specific fields
+  const [locationField, setLocationField] = useState("")
+  const [landSize, setLandSize] = useState("")
+  const [crops, setCrops] = useState("")
+
+  const [address, setAddress] = useState("")
+  const [phone, setPhone] = useState("")
+
+  const [qualification, setQualification] = useState("")
+  const [experience, setExperience] = useState("")
+  const [specialization, setSpecialization] = useState("")
+
+  // Protect route
   useEffect(() => {
-    if (!role) {
-      navigate("/")
-    }
+    if (!role) navigate("/loginSelection")
   }, [role, navigate])
 
   function handleNavigatelogin() {
@@ -38,18 +48,43 @@ function SignupPage() {
   }
 
   async function handleRegister() {
+    const payload = {
+      role,
+      fullname,
+      email,
+      password,
+    }
+
+    if (role === "FARMER") {
+      payload.extra = {
+        location: locationField,
+        landSize,
+        crops,
+      }
+    }
+
+    if (role === "CUSTOMER") {
+      payload.extra = {
+        address,
+        phone,
+      }
+    }
+
+    if (role === "AGRI_EXPERT") {
+      payload.extra = {
+        qualification,
+        experience,
+        specialization,
+      }
+    }
+
+    console.log("REGISTER PAYLOAD 👉", payload)
+
     const result = await appwriteAccount.createAppwriteAccount(
       email,
       password,
       fullname
     )
-
-    console.log({
-      role,
-      fullname,
-      email,
-      result,
-    })
 
     if (result?.status) {
       navigate("/login")
@@ -57,8 +92,8 @@ function SignupPage() {
   }
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-gradient-to-b from-green-50 to-emerald-100">
-      <Card className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-100 p-6">
+      <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>
             Register as{" "}
@@ -66,11 +101,9 @@ function SignupPage() {
               {role?.toLowerCase().replace("_", " ")}
             </span>
           </CardTitle>
-
           <CardDescription>
             Enter your details to create your account
           </CardDescription>
-
           <CardAction>
             <Button variant="link" onClick={handleNavigatelogin}>
               Log In
@@ -79,65 +112,78 @@ function SignupPage() {
         </CardHeader>
 
         <CardContent>
-          <form>
-            <div className="flex flex-col gap-6">
-              {/* Full Name */}
-              <div className="grid gap-2">
-                <Label htmlFor="fullname">Full Name</Label>
-                <Input
-                  id="fullname"
-                  type="text"
-                  placeholder="e.g., Chintu"
-                  required
-                  value={fullname}
-                  onChange={(e) => setFullname(e.target.value)}
-                />
-              </div>
-
-              {/* Email */}
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              {/* Password */}
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
+          <div className="flex flex-col gap-6">
+            {/* Common Fields */}
+            <div className="grid gap-2">
+              <Label>Full Name</Label>
+              <Input value={fullname} onChange={(e) => setFullname(e.target.value)} />
             </div>
-          </form>
+
+            <div className="grid gap-2">
+              <Label>Email</Label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Password</Label>
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            </div>
+
+            {/* FARMER */}
+            {role === "FARMER" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Location</Label>
+                  <Input value={locationField} onChange={(e) => setLocationField(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Land Size (acres)</Label>
+                  <Input value={landSize} onChange={(e) => setLandSize(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Crops Grown</Label>
+                  <Input value={crops} onChange={(e) => setCrops(e.target.value)} />
+                </div>
+              </>
+            )}
+
+            {/* CUSTOMER */}
+            {role === "CUSTOMER" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Address</Label>
+                  <Input value={address} onChange={(e) => setAddress(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Phone</Label>
+                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+              </>
+            )}
+
+            {/* AGRI EXPERT */}
+            {role === "AGRI_EXPERT" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Qualification</Label>
+                  <Input value={qualification} onChange={(e) => setQualification(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Experience (years)</Label>
+                  <Input value={experience} onChange={(e) => setExperience(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Specialization</Label>
+                  <Input value={specialization} onChange={(e) => setSpecialization(e.target.value)} />
+                </div>
+              </>
+            )}
+          </div>
         </CardContent>
 
-        <CardFooter className="flex-col gap-2">
-          <Button onClick={handleRegister} className="w-full">
+        <CardFooter>
+          <Button className="w-full" onClick={handleRegister}>
             Register
-          </Button>
-
-          <Button variant="outline" className="w-full">
-            Register with Google
           </Button>
         </CardFooter>
       </Card>

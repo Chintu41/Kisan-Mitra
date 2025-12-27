@@ -19,7 +19,7 @@ const Herosection = () => {
         markets, transport, and expert guidance.
       </p>
 
-       <Link to="/roleSelector"
+       <Link to="/loginselection"
         className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white text-lg font-semibold rounded-xl shadow-md transition-all"
       >
         🌱 Start Farming Smarter
