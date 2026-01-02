@@ -26,7 +26,7 @@ function PublicRoute(props){
 
     if(user){
         return(
-            <Navigate to="/farmer"/>
+            <Navigate to="/dashboard"/>
         )
     }
 
