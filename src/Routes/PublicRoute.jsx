@@ -1,35 +1,36 @@
-import { useState ,useEffect} from "react";
+import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import AppwriteAccount from "../Appwrite/Account.Services";
-import { Navigate } from "react-router";
 
-function PublicRoute(props){
-    const {children}=props;
-    const [user,setUser]=useState(null)
-    const [isCheckingUser,setIsCheckingUser]=useState(true)
+function PublicRoute({ children }) {
+  const [user, setUser] = useState(null);
+  const [isCheckingUser, setIsCheckingUser] = useState(true);
 
-    const appwriteAccount=new AppwriteAccount();
-    async function fetchUser(){
-        try{
-            const appwriteUser=await appwriteAccount.getAppwriteUser(); 
-            setUser(appwriteUser)
-        }catch(error){
-            console.log(error.message)
-        }
-        finally{
-            console.log("inside the finally-block")
-            setIsCheckingUser(false)
-        }
+  const appwriteAccount = new AppwriteAccount();
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const appwriteUser = await appwriteAccount.getAppwriteUser();
+        setUser(appwriteUser);
+      } catch (error) {
+        setUser(null);
+      } finally {
+        setIsCheckingUser(false);
+      }
     }
-    useEffect(()=>{
-        fetchUser();
-    },[])
+    fetchUser();
+  }, []);
 
-    if(user){
-        return(
-            <Navigate to="/dashboard"/>
-        )
-    }
+  if (isCheckingUser) {
+    return <div>Checking authentication...</div>;
+  }
 
-return children;
+  if (user) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  return children;
 }
+
 export default PublicRoute;
