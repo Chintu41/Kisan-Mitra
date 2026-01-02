@@ -5,27 +5,18 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import MyDashboard from './pages/MyDashboard'
 import App from './App.jsx'
-import AppwriteAccount from './Appwrite/Account.Services'
-import { APPWRITE_ENDPOINT } from './Utils/Appwrite/constants'
 import PublicRoute from './Routes/PublicRoute'
 import LoginSelection from './pages/LoginSelection'
 import RoleSelector from './pages/RoleSelector'
 import PrivateRoute from './Routes/PrivateRoute'
 
-console.log(typeof APPWRITE_ENDPOINT)
-
-//instance
-const appwriteAccount=new AppwriteAccount()
-const user= await appwriteAccount.getAppwriteUser()
-console.log(user)
-
 const router=createBrowserRouter([
   { path: "/",
-     element: <App/> 
+     element: <App/>
    },
 
   { path: "/register",
-     element: <SignupPage/> 
+     element: <SignupPage/>
    },
 
   { path: "/login",
@@ -33,8 +24,7 @@ const router=createBrowserRouter([
    },
      {
       path:"/dashboard",
-      // element:<PrivateRoute><MyDashboard/></PrivateRoute>
-      element:<MyDashboard/>
+      element:<PrivateRoute><MyDashboard/></PrivateRoute>
      },
      {
       path:"/loginSelection",
