@@ -31,11 +31,14 @@ function LogInPage() {
                     email,
                     password
                 );
-            console.log(result);
+            console.log(result.role);
 
-            if (result) {
-                navigate("/dashboard");
+            if (result.role === "FARMER") {
+                navigate("/farmer");
             }
+            // else {
+            //     navigate("/login");
+            // }
         } catch (error) {
             console.log("Error inside the LogInPage.jsx:", error);
         }

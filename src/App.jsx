@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AppwriteAccount from "./Appwrite/Account.Services";
 import { useNavigate, Link } from "react-router";
 import Herosection from "./pages/Herosection";
+import { Spinner } from "@/components/ui/spinner";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -18,19 +19,23 @@ function App() {
   }
 
   useEffect(() => {
-  // ComponentWillUnmount()
-  console.log("loading...");  
-  setTimeout(()=>{
-    setIsLoading(false);
-  },2000)  
-}, []);//empty dependency
+    // ComponentWillUnmount()
+    console.log("loading...");
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []); //empty dependency
   //ComponentDidUpdate()
-if(isLoading){
-  return <h1>Loading....</h1>
-}
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-linear-to-b from-green-50 to-emerald-100">
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <>
-    <Herosection/>
+      <Herosection />
     </>
   );
 }
