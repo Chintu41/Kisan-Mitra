@@ -29,9 +29,8 @@ function App() {
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20 bg-linear-to-b from-green-50 to-emerald-100">
-  <Spinner />
-</div>
-
+        <Spinner />
+      </div>
     );
   }
   return (

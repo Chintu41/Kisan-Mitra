@@ -24,7 +24,6 @@ function PublicRoute({ children }) {
     fetchUser();
   }, []);
 
-<<<<<<< HEAD
   if (isCheckingUser) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-100">
@@ -40,17 +39,12 @@ function PublicRoute({ children }) {
       </div>
     );
   }
-=======
     if(user){
         return(
             <Navigate to="/farmer"/>
         )
     }
->>>>>>> 14a353e70da7ddc469c4933bb4cc6a7bac6efedd
 
-  if (user) {
-    return <Navigate to="/dashboard" />;
-  }
 
   return children;
 }

@@ -33,8 +33,8 @@ function LogInPage() {
                 );
             console.log(result.role);
 
-            if (result) {
-                navigate("/dashboard");
+            if (result.role === "FARMER") {
+                navigate("/farmer");
             }
             // else {
             //     navigate("/login");
