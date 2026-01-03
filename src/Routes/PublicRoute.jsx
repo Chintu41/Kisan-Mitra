@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import AppwriteAccount from "../Appwrite/Account.Services";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 function PublicRoute({ children }) {
   const [user, setUser] = useState(null);
@@ -22,9 +24,29 @@ function PublicRoute({ children }) {
     fetchUser();
   }, []);
 
+<<<<<<< HEAD
   if (isCheckingUser) {
-    return <div>Checking authentication...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-100">
+        <Button
+          variant="outline"
+          disabled
+          size="sm"
+          className="flex items-center gap-2"
+        >
+          <Spinner />
+          Please wait
+        </Button>
+      </div>
+    );
   }
+=======
+    if(user){
+        return(
+            <Navigate to="/farmer"/>
+        )
+    }
+>>>>>>> 14a353e70da7ddc469c4933bb4cc6a7bac6efedd
 
   if (user) {
     return <Navigate to="/dashboard" />;
