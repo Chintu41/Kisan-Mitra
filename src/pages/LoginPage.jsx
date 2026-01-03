@@ -22,7 +22,7 @@ function LogInPage() {
     const appwriteAccount = new AppwriteAccount();
 
     function handleNavigateToRegisterPage() {
-        navigate("/register");
+        navigate("/loginSelection");
     }
 
     async function handleLogInUser() {
@@ -34,7 +34,7 @@ function LogInPage() {
             console.log(result);
 
             if (result) {
-                navigate("/");
+                navigate("/dashboard");
             }
         } catch (error) {
             console.log("Error inside the LogInPage.jsx:", error);
@@ -42,7 +42,7 @@ function LogInPage() {
     }
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-100 p-6">
             <Card className="w-full max-w-sm">
                 <CardHeader>
                     <CardTitle>Login to your account</CardTitle>

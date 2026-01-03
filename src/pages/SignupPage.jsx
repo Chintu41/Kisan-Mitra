@@ -10,98 +10,185 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useNavigate } from "react-router"
-import { useState } from "react"
+import { useNavigate, useLocation } from "react-router"
+import { useState, useEffect } from "react"
 import AppwriteAccount from "../Appwrite/Account.Services"
 
- function SignupPage() {
+function SignupPage() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const appwriteAccount = new AppwriteAccount()
 
-   const navigate = useNavigate()
-   const appwriteAccount = new AppwriteAccount()
+  const role = location.state?.role
 
-   const [fullname, setFullname] = useState("")
-   const [email, setEmail] = useState("")
-   const [password, setPassword] = useState("")
+  // Common fields
+  const [fullname, setFullname] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-   function handleNavigatelogin(){
+  // Role-specific fields
+  const [locationField, setLocationField] = useState("")
+  const [landSize, setLandSize] = useState("")
+  const [crops, setCrops] = useState("")
+
+  const [address, setAddress] = useState("")
+  const [phone, setPhone] = useState("")
+
+  const [qualification, setQualification] = useState("")
+  const [experience, setExperience] = useState("")
+  const [specialization, setSpecialization] = useState("")
+
+  // Protect route
+  useEffect(() => {
+    if (!role) navigate("/loginSelection")
+  }, [role, navigate])
+
+  function handleNavigatelogin() {
+    navigate("/login")
+  }
+
+  async function handleRegister() {
+    const payload = {
+      role,
+      fullname,
+      email,
+      password,
+    }
+
+    if (role === "FARMER") {
+      payload.extra = {
+        location: locationField,
+        landSize,
+        crops,
+      }
+    }
+
+    if (role === "CUSTOMER") {
+      payload.extra = {
+        address,
+        phone,
+      }
+    }
+
+    if (role === "AGRI_EXPERT") {
+      payload.extra = {
+        qualification,
+        experience,
+        specialization,
+      }
+    }
+
+    console.log("REGISTER PAYLOAD 👉", payload)
+
+    const result = await appwriteAccount.createAppwriteAccount(
+      email,
+      password,
+      fullname
+    )
+
+    if (result?.status) {
       navigate("/login")
-   }
-
-   async function handleRegister(){
-     const result = await appwriteAccount.createAppwriteAccount(email, password, fullname)
-     console.log(result)
-     if(result?.status){
-      navigate("/login")
-     }
-   }
+    }
+  }
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center">
-    <Card className="w-full max-w-sm">
-      <CardHeader>
-        <CardTitle>Register to your account</CardTitle>
-        <CardDescription>
-          Enter your details register to your account
-        </CardDescription>
-        <CardAction>
-          <Button variant="link" onClick={handleNavigatelogin}>Log In </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <form>
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-green-50 to-emerald-100 p-6">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>
+            Register as{" "}
+            <span className="text-green-600 capitalize">
+              {role?.toLowerCase().replace("_", " ")}
+            </span>
+          </CardTitle>
+          <CardDescription>
+            Enter your details to create your account
+          </CardDescription>
+          <CardAction>
+            <Button variant="link" onClick={handleNavigatelogin}>
+              Log In
+            </Button>
+          </CardAction>
+        </CardHeader>
+
+        <CardContent>
           <div className="flex flex-col gap-6">
+            {/* Common Fields */}
             <div className="grid gap-2">
-              <Label htmlFor="fullname">Full Name</Label>
-              <Input
-                id="fullname"
-                type="text"
-                placeholder="e.g.,Chintu"
-                required
-                value={fullname}
-                onChange={(e) => setFullname(e.target.value)}
-              />
+              <Label>Full Name</Label>
+              <Input value={fullname} onChange={(e) => setFullname(e.target.value)} />
             </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <Label>Email</Label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
+
             <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              </div>
-              <Input id="password"
-               type="password"
-               placeholder="********"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)} />
+              <Label>Password</Label>
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
+
+            {/* FARMER */}
+            {role === "FARMER" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Location</Label>
+                  <Input value={locationField} onChange={(e) => setLocationField(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Land Size (acres)</Label>
+                  <Input value={landSize} onChange={(e) => setLandSize(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Crops Grown</Label>
+                  <Input value={crops} onChange={(e) => setCrops(e.target.value)} />
+                </div>
+              </>
+            )}
+
+            {/* CUSTOMER */}
+            {role === "CUSTOMER" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Address</Label>
+                  <Input value={address} onChange={(e) => setAddress(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Phone</Label>
+                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
+                </div>
+              </>
+            )}
+
+            {/* AGRI EXPERT */}
+            {role === "AGRI_EXPERT" && (
+              <>
+                <div className="grid gap-2">
+                  <Label>Qualification</Label>
+                  <Input value={qualification} onChange={(e) => setQualification(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Experience (years)</Label>
+                  <Input value={experience} onChange={(e) => setExperience(e.target.value)} />
+                </div>
+                <div className="grid gap-2">
+                  <Label>Specialization</Label>
+                  <Input value={specialization} onChange={(e) => setSpecialization(e.target.value)} />
+                </div>
+              </>
+            )}
           </div>
-        </form>
-      </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button onClick={handleRegister} className="w-full">
-          Register       
-           </Button>
-        <Button variant="outline" className="w-full">
-          Reister with Google
-        </Button>
-      </CardFooter>
-    </Card>
-        </div>
+        </CardContent>
+
+        <CardFooter>
+          <Button className="w-full" onClick={handleRegister}>
+            Register
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   )
 }
+
 export default SignupPage

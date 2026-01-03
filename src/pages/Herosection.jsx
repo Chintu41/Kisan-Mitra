@@ -37,15 +37,11 @@ const Herosection = () => {
           markets, transport, and expert guidance.
         </p>
 
-        {/* CTA Button */}
-        <div className="animate-slide-up delay-200">
-          <Link
-            to="/loginSelection"
-            className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-green-600 font-pj rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600 hover:bg-green-700 hover:scale-105 shadow-lg hover:shadow-green-500/30"
-          >
-            <span className="mr-2">🌱</span> Start Farming Smarter
-            <div className="absolute -inset-3 rounded-xl bg-gradient-to-r from-green-400 to-emerald-600 opacity-20 blur-lg transition-all duration-200 group-hover:opacity-40 group-hover:-inset-4"></div>
-          </Link>
+       <Link to="/loginSelection"
+        className="px-6 py-3 bg-green-700 hover:bg-green-800 text-white text-lg font-semibold rounded-xl shadow-md transition-all"
+      >
+        🌱 Start Farming Smarter
+      </Link>
         </div>
       </div>
 
